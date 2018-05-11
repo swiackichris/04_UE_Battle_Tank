@@ -18,5 +18,11 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 public:
 	ATank* GetControlledTank() const;
 	
+	virtual void Tick(float DeltaTime) override;
+
 	virtual void BeginPlay() override;
+
+	// Start the tank moving the barrel so that a shot would hit where
+	// the crosshair intersects the world
+	void AimTowardsCrosshair();
 };
