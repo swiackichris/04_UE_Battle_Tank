@@ -21,6 +21,23 @@ void ATankAIController::BeginPlay()
 	}
 }
 
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (GetPlayerTank())
+	{
+		// TODO Move towards the player
+
+		// Aim towards the player
+		GetAIControlledTank()->AimAt(GetPlayerTank()->GetActorLocation());
+		//auto AITankName = GetAIControlledTank()->GetName();
+		//auto OurTankName = GetPlayerTank()->GetActorLocation();
+		//UE_LOG(LogTemp, Warning, TEXT("%s AI tank is aiming at: %s"), *AITankName, *OurTankName.ToString());
+
+		// Fire if ready
+	}
+}
+
 ATank* ATankAIController::GetAIControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
