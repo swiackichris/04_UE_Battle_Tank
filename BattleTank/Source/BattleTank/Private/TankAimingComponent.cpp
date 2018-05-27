@@ -58,7 +58,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
-		// Solution found
 	}
 	// If no solution found do nothing
 }
@@ -71,7 +70,13 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
 	Barrel->Elevate(DeltaRotator.Pitch);
+	if (FMath::Abs(DeltaRotator.Yaw) > 180.F)
+	{
+		DeltaRotator.Yaw *= -1.F;
+	}
 	Turret->Rotate(DeltaRotator.Yaw);
+	// move the barrel towards to aim direction
+	// the movement shall be based on elevation speed and frame rate
 }
 
 

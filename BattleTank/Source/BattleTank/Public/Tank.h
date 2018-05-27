@@ -7,9 +7,10 @@
 #include "Tank.generated.h" // Put new includes above
 
 // Forward declarations
-class UTankTurret;
 class UTankBarrel;
 class UTankAimingComponent;
+class AProjectile;
+// TODO check later class UTurret;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -17,15 +18,15 @@ class BATTLETANK_API ATank : public APawn
 	GENERATED_BODY()
 
 public:
-	void AimAt(FVector HitLocation);
-
 	UFUNCTION(BlueprintCallable, Category = Setup)
 		void SetBarrelReference(UTankBarrel* BarrelToSet);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 		void SetTurretReference(UTankTurret* TurretToSet);
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	void AimAt(FVector HitLocation);
+
+	UFUNCTION(BlueprintCallable, Category = Firing)
 		void Fire();
 
 protected:
@@ -42,5 +43,11 @@ private:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
 	UPROPERTY(EditAnywhere, Category = Firing)
-		float LaunchSpeed = 6000;
+		float LaunchSpeed = 8000;
+
+	UPROPERTY(EditAnywhere, Category = Setup)
+		TSubclassOf<AProjectile> Projectileblueprint;
+
+	// Local barrel reference for spawning projectile
+	UTankBarrel* Barrel = nullptr;
 };
