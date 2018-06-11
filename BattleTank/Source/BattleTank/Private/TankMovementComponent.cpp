@@ -2,6 +2,7 @@
 
 #include "TankMovementComponent.h"
 #include "TankTrack.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
 
 void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
 {
@@ -26,4 +27,9 @@ void UTankMovementComponent::IntendTurnRight(float Throw)
 	// TODO prevent double-speed due to dual control use
 }
 
-
+void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
+{
+	// No need to call Super as we're replacing the functionality
+	auto TankName = GetOwner()->GetName();
+	UE_LOG(LogTemp, Warning, TEXT("Tank: %s moves at: %s"), *TankName, *MoveVelocity.ToString());
+}
