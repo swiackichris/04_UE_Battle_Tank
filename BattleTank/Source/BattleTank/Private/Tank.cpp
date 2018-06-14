@@ -13,8 +13,15 @@
 // Sets default values
 ATank::ATank()
 {
+	UE_LOG(LogTemp, Warning, TEXT("PREFIX TANK Constructor Working")); // TODO remove this log
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+}
+
+void ATank::BeginPlay()
+{
+	UE_LOG(LogTemp, Warning, TEXT("PREFIX TANK BeginPlay Working"));
+	Super::BeginPlay(); // TODO remove this function needed for BP begin play to run!
 }
 
 void ATank::AimAt(FVector HitLocation)
