@@ -2,7 +2,6 @@
 
 #include "Tank.h"
 #include "TankBarrel.h"
-#include "TankAimingComponent.h"
 #include "Projectile.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
@@ -20,14 +19,7 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay(); // TODO remove this function needed for BP begin play to run!
 
-	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
 	Barrel = FindComponentByClass<UTankBarrel>();
-}
-
-void ATank::AimAt(FVector HitLocation)
-{
-	if (!ensure(TankAimingComponent)) { return; }
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 void ATank::Fire()
