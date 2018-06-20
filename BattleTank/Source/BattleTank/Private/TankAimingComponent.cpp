@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAimingComponent.h"
+#include "Projectile.h"
 #include "TankTurret.h"
 #include "TankBarrel.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
@@ -73,6 +74,27 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	Turret->Rotate(DeltaRotator.Yaw);
 	// move the barrel towards to aim direction
 	// the movement shall be based on elevation speed and frame rate
+}
+
+void UTankAimingComponent::Fire()
+{
+	if (!ensure(Barrel && Projectileblueprint)) { return; }
+	bool isReloaded = (GetWorld()->GetRealTimeSeconds() - LastFireTime) > ReloadTimeInSeconds;
+
+	if (isReloaded)
+	{
+
+		// Spawn a projectile at the socket location on the barrel	
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>
+			(
+				Projectileblueprint,
+				Barrel->GetSocketLocation(FName("Projectile")),
+				Barrel->GetSocketRotation(FName("Projectile"))
+				);
+
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = GetWorld()->GetRealTimeSeconds();
+	}
 }
 
 
