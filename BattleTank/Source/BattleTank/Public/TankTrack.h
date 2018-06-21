@@ -28,6 +28,10 @@ public:
 		float TrackMaxDrivingForce = 100000.f;
 
 private:
+	virtual void BeginPlay() override;
 	UTankTrack();
+	UFUNCTION() // Add stuff
+	void OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit);
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
 };
+

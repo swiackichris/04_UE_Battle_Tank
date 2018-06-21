@@ -7,6 +7,16 @@
 #include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/UObjectBaseUtility.h"
 
+void UTankTrack::BeginPlay()
+{
+	Super::BeginPlay();
+	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
+}
+
+void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Im hit, im hit"));
+}
 
 UTankTrack::UTankTrack()
 {
