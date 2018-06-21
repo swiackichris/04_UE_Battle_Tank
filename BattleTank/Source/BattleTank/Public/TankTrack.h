@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "Runtime/Engine/Classes/Engine/World.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
+#include "Runtime/Engine/Classes/GameFramework/Controller.h"
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
 #include "TankTrack.generated.h"
@@ -23,4 +26,8 @@ public:
 	// Max force per track, in Newtons
 	UPROPERTY(EditDefaultsOnly)
 		float TrackMaxDrivingForce = 100000.f;
+
+private:
+	UTankTrack();
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
 };

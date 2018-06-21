@@ -28,7 +28,7 @@ void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	// So that first fire is after initial relolad
-	LastFireTime = GetWorld()->GetRealTimeSeconds(); // #### Try to fix this
+	LastFireTime = GetWorld()->GetRealTimeSeconds();
 }
 
 void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
@@ -113,8 +113,6 @@ void UTankAimingComponent::Fire()
 	{
 		if (!ensure(Barrel)) { return; }
 		if (!ensure(Projectileblueprint)) { return; }
-		// bool isReloaded = (GetWorld()->GetRealTimeSeconds() - LastFireTime) > ReloadTimeInSeconds; // #### To be removed, temporary so that everything works.
-		// if (isReloaded) #### TO BE DELETED
 
 			// Spawn a projectile at the socket location on the barrel	
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>
@@ -123,7 +121,6 @@ void UTankAimingComponent::Fire()
 				Barrel->GetSocketLocation(FName("Projectile")),
 				Barrel->GetSocketRotation(FName("Projectile"))
 			);
-		// LastFireTime = GetWorld()->GetRealTimeSeconds(); ### To be deleted as it has been added in begin play
 		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = GetWorld()->GetRealTimeSeconds();
 	}
