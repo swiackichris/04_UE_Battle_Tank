@@ -26,16 +26,9 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::BeginPlay()
 {
+	Super::BeginPlay();
 	// So that first fire is after initial relolad
-}
-
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
-{
-	if (bool isReloaded = (GetWorld()->GetRealTimeSeconds() - LastFireTime) > ReloadTimeInSeconds)
-	{
-		FiringState = EFiringState::Reloading;
-	}
-	// TODO Handle aiming and locked states
+	LastFireTime = GetWorld()->GetRealTimeSeconds(); // #### Try to fix this
 }
 
 void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
@@ -43,6 +36,30 @@ void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* Tur
 	Barrel = BarrelToSet;
 	Turret = TurretToSet;
 	// TODO need to get a Getter for Barrel and Turret. and BarrelToSet and TurretToSet?
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	if ((GetWorld()->GetRealTimeSeconds() - LastFireTime) < ReloadTimeInSeconds)
+	{
+		FiringState = EFiringState::Reloading;
+	}
+	else if (IsBarrelMoving())
+	{
+		FiringState = EFiringState::Aiming;
+	}
+	else
+	{
+		FiringState = EFiringState::Locked;
+	}
+	// TODO Handle aiming and locked states
+}
+
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(Barrel)) { return false; }
+	auto BarrelForward = Barrel->GetForwardVector();
+	return !BarrelForward.Equals(AimDirection, 0.01); // Vectors are equal
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
@@ -66,7 +83,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 
 	if (bHaveAimSolution)
 	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 	}
 	// If no solution found do nothing
@@ -74,7 +91,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
-	if (!ensure(Barrel && Turret)) { return; }
+	if (!ensure(Barrel) || !ensure(Turret)) { return; }
 	// Work-out difference between current barrel roation, and AimDirection
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
@@ -92,19 +109,21 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 void UTankAimingComponent::Fire()
 {
-	if (!ensure(Barrel && Projectileblueprint)) { return; }
-
-	if (FiringState != EFiringState::Reloading)
+	if (FiringState != EFiringState::Reloading) // #### TO BE ADDED
 	{
+		if (!ensure(Barrel)) { return; }
+		if (!ensure(Projectileblueprint)) { return; }
+		// bool isReloaded = (GetWorld()->GetRealTimeSeconds() - LastFireTime) > ReloadTimeInSeconds; // #### To be removed, temporary so that everything works.
+		// if (isReloaded) #### TO BE DELETED
 
-		// Spawn a projectile at the socket location on the barrel	
+			// Spawn a projectile at the socket location on the barrel	
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>
 			(
 				Projectileblueprint,
 				Barrel->GetSocketLocation(FName("Projectile")),
 				Barrel->GetSocketRotation(FName("Projectile"))
-				);
-
+			);
+		// LastFireTime = GetWorld()->GetRealTimeSeconds(); ### To be deleted as it has been added in begin play
 		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = GetWorld()->GetRealTimeSeconds();
 	}
