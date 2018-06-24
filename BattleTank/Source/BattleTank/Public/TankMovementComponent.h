@@ -9,7 +9,7 @@
 class UTankTrack;
 
 /**
- * Responsile for driving the tank tyracks
+ * Responsile for driving the tank tracks
  */
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
