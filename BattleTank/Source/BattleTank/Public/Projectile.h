@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 // ###########################################################################
+#include "Runtime/Engine/Classes/PhysicsEngine/RadialForceComponent.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
 #include "Runtime/Engine/Classes/Particles/ParticleSystem.h"
@@ -45,4 +46,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UParticleSystemComponent* ImpactBlast = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	URadialForceComponent* ExplosionForce = nullptr;
 };
