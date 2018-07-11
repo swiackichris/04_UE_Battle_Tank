@@ -28,13 +28,8 @@ public:
 		float TrackMaxDrivingForce = 100000.f;
 
 private:
-	virtual void BeginPlay() override;
 	UTankTrack();
-	UFUNCTION() // Add stuff
-	void OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit);
-	void ApplySidewaysForce();
-	void DriveTrack();
-
-	float CurrentThrottle = 0;
+	TArray<class ASprungWheel*> GetWheels() const;
+	void DriveTrack(float CurrentThrottle);
 };
 
